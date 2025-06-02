@@ -1,0 +1,184 @@
+<div class="mt-4 p-40">
+
+     <!-- [ breadcrumb ] start -->
+      <div class="page-header">
+  <div class="page-block">
+    <div class="row align-items-center">
+      <div class="col-md-12">
+        <div class="page-header-title">
+          <!-- Link to the correct dashboard dynamically -->
+          <h5 style="cursor: pointer;" [routerLink]="dashboardLink" class="m-b-10">
+            {{ userRole === 'ADMIN' ? 'Admin Dashboard' : 'Staff Dashboard' }}
+          </h5>
+        </div>
+        <ul class="breadcrumb">
+          <li class="breadcrumb-item">
+            <a>{{ userRole === 'ADMIN' ? 'Admin' : 'Staff' }}</a>
+          </li>
+          <li class="breadcrumb-item">
+            <a [routerLink]="dashboardLink">{{ userRole === 'ADMIN' ? 'Dashboard' : 'Dashboard' }}</a>
+          </li>
+          <li class="breadcrumb-item" aria-current="page">
+            Inventory Management
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+  <br>
+
+<h2 class="mb-4">Inventory Management</h2>
+
+  <!-- Add Inventory Form -->
+  <form *ngIf="userRole === 'ADMIN'" (ngSubmit)="addInventory()" class="">
+    <div class="row">
+      <div class="col-md-3 mb-3">
+        <label>Quantity</label>
+        <input type="number" class="form-control" [(ngModel)]="newInventory.quantity" name="quantity" required />
+      </div>
+      <div class="col-md-3 mb-3">
+        <label>Location</label>
+        <input type="text" class="form-control" [(ngModel)]="newInventory.location" name="location" required />
+      </div>
+      <div class="col-md-3 mb-3">
+        <label>Status</label>
+        <select class="form-control" [(ngModel)]="newInventory.status" name="status" required>
+          <option value="">Select Status</option>
+          <option>Available</option>
+          <option>In Use</option>
+          <option>Maintenance</option>
+        </select>
+      </div>
+      <div class="col-md-3 mb-3">
+        <label>Last Checked</label>
+        <input type="date" class="form-control" [(ngModel)]="newInventory.lastChecked" name="lastChecked" />
+      </div>
+      <div class="col-md-4 mb-3">
+        <label>Cylinder</label>
+        <select class="form-control" [(ngModel)]="newInventory.cylinder!.cylinderId" name="cylinder" required>
+          <option *ngFor="let c of cylinders" [value]="c.cylinderId">
+            Cylinder {{ c.cylinderId }} - {{ c.location }}
+          </option>
+        </select>
+      </div>
+    </div>
+
+    <button type="submit" class="btn btn-primary mt-2">Add Inventory</button>
+  </form><br>
+
+  <!-- Inventory Table -->
+ <div class="table-responsive">
+    <div class="card">
+      <div class="card-body">
+
+  <table class="table table-bordered table-hover ">
+    <thead class="table-dark">
+      <tr>
+        <th>ID</th>
+        <th>Quantity</th>
+        <th>Location</th>
+        <th>Status</th>
+        <th>Last Checked</th>
+        <th>Cylinder ID</th>
+        <th *ngIf="userRole === 'ADMIN'" >Actions</th>  
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let i of inventories">
+        <td>{{ i.id }}</td>
+        <td>{{ i.quantity }}</td>
+        <td>{{ i.location }}</td>
+        <td>{{ i.status }}</td>
+        <td>{{ i.lastChecked | date: 'yyyy-MM-dd' }}</td>
+        <td>{{ i.cylinder?.cylinderId }}</td>
+        <td *ngIf="userRole === 'ADMIN'">
+          <div class="d-grid gap-2 d-md-flex justify-content-md-center">
+        <button class="btn btn-sm btn-info me-2 " data-bs-toggle="modal" data-bs-target="#editModal1"(click)="editInventory(i)">Edit</button>
+          <button class="btn btn-sm btn-danger" (click)="deleteInventory(i.id!)">Delete</button>
+          </div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+      </div>
+  </div>
+ </div>
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+<!-- Edit Inventory Modal -->
+<!-- Modal -->
+<div class="modal fade" id="editModal1" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <!-- Form starts here -->
+      <form (ngSubmit)="saveInventory()" *ngIf="editInventoryData">
+        <div class="modal-header">
+          <h5 class="modal-title" id="editModalLabel">Edit Inventory</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+
+        <div class="modal-body">
+          <div class="row">
+            <!-- Quantity -->
+            <div class="col-md-6 mb-3">
+              <label for="editQuantity">Quantity</label>
+              <input type="number" class="form-control" id="editQuantity" [(ngModel)]="editInventoryData.quantity" name="editQuantity">
+            </div>
+
+            <!-- Location -->
+            <div class="col-md-6 mb-3">
+              <label for="editLocation">Location</label>
+              <input type="text" class="form-control" id="editLocation" [(ngModel)]="editInventoryData.location" name="editLocation">
+            </div>
+
+            <!-- Status -->
+            <div class="col-md-6 mb-3">
+              <label for="editStatus">Status</label>
+              <select class="form-control" id="editStatus" [(ngModel)]="editInventoryData.status" name="editStatus">
+                <option>Available</option>
+                <option>In Use</option>
+                <option>Maintenance</option>
+              </select>
+            </div>
+
+            <!-- Last Checked -->
+            <div class="col-md-6 mb-3">
+              <label for="editLastChecked">Last Checked</label>
+              <input type="date" class="form-control" id="editLastChecked" [(ngModel)]="editInventoryData.lastChecked" name="editLastChecked">
+            </div>
+
+            <!-- Cylinder -->
+            <div class="col-md-12 mb-3">
+              <label for="editCylinder">Cylinder</label>
+              <select class="form-control" id="editCylinder" [(ngModel)]="editInventoryData.cylinder!.cylinderId" name="editCylinder">
+                <option *ngFor="let c of cylinders" [value]="c.cylinderId">
+                  Cylinder {{ c.cylinderId }} - {{ c.location }}
+                </option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-primary">Save Changes</button>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+

@@ -1,0 +1,101 @@
+<!--<li class="dropdown pc-h-item">
+      <a
+        class="pc-head-link dropdown-toggle arrow-none me-0"
+        data-bs-toggle="dropdown"
+        (click)="resetViewState()"
+        routerLink=""
+        role="button"
+        aria-haspopup="false"
+        aria-expanded="false"
+      >
+        <i class="ti ti-mail"></i>
+        <span style="font-size: 10px;" *ngIf="unreadCount > 0" class="badge bg-danger translate-middle badge rounded-pill bg-danger">{{ notifications.length }}</span>
+     
+
+      </a>
+
+    
+      <div class="dropdown-menu dropdown-notification dropdown-menu-end pc-h-dropdown">
+        <div class="dropdown-header d-flex align-items-center justify-content-between">
+          <h5 class="m-0">Message</h5>
+          <a routerLink="" class="pc-head-link bg-transparent"><i class="ti ti-x text-danger"></i></a>
+        </div>
+        <div class="dropdown-divider"></div>
+        <div class="dropdown-header px-0 text-wrap header-notification-scroll position-relative" style="max-height: calc(100vh - 215px)">
+          <div class="list-group list-group-flush w-100">
+            <a *ngFor="let notify of showAll ? notifications:notifications.slice(0,3)" class="list-group-item list-group-item-action">
+              <div class="d-flex">
+                <div class="flex-shrink-0">
+                  <img src="assets/templates/images/user/avatar-2.jpg" alt="user-image" class="user-avtar">
+                </div>
+                <div class="flex-grow-1 ms-1">
+                    <span class="badge bg-info ms-2">{{ notify.role }}</span>
+                  <span class="float-end text-muted">{{ notify.createdAt | date:'shortTime' }}</span>
+                  <p class="text-body mb-1"><b>{{ notify.message }}</b></p>
+                  <span class="text-muted">{{ notify.createdAt  | date:'shortDate' }}</span>
+                </div>
+              </div>
+            </a>
+           
+           
+           
+              
+
+          </div>
+        </div>
+        <div class="dropdown-divider"></div>
+        <div class="text-center py-2">
+          <a  href="#" (click)="toggleShowAll($event)" class="link-primary">{{ showAll ? 'View Less' : 'View All' }}</a>
+        </div>
+      </div>
+</li>-->
+
+<li class="dropdown pc-h-item">
+  <a
+    class="pc-head-link dropdown-toggle arrow-none me-0"
+    data-bs-toggle="dropdown"
+    (click)="markAllAsRead()"
+    role="button"
+    aria-haspopup="false"
+    aria-expanded="false"
+  >
+    <i class="ti ti-mail"></i>
+    <span *ngIf="unreadCount > 0" class="badge bg-danger">{{ unreadCount }}</span>
+  </a>
+
+  <!-- Message Dropdown -->
+  <div class="dropdown-menu dropdown-notification dropdown-menu-end pc-h-dropdown" (click)="$event.stopPropagation()">
+    <div class="dropdown-header d-flex align-items-center justify-content-between">
+      <h5 class="m-0">Message</h5>
+      <a  class="pc-head-link bg-transparent"><i class="ti ti-x text-danger"></i></a>
+    </div>
+    <div class="dropdown-divider"></div>
+
+    <!-- Notification List -->
+    <div class="dropdown-header px-0 text-wrap header-notification-scroll position-relative" style="max-height: calc(100vh - 215px)">
+      <div class="list-group list-group-flush w-100">
+        <a *ngFor="let notify of visibleNotifications" class="list-group-item list-group-item-action">
+          <div class="d-flex">
+            <div class="flex-shrink-0">
+              <img src="assets/templates/images/user/avatar-2.jpg" alt="user-image" class="user-avtar" />
+            </div>
+            <div class="flex-grow-1 ms-1">
+              <span class="badge bg-info ms-2">{{ notify.role }}</span>
+              <span class="float-end text-muted">{{ notify.createdAt | date: 'shortTime' }}</span>
+              <p class="text-body mb-1"><b>{{ notify.message }}</b></p>
+              <span class="text-muted">{{ notify.createdAt | date: 'shortDate' }}</span>
+            </div>
+          </div>
+        </a>
+      </div>
+    </div>
+
+    <!-- Toggle Button -->
+    <div class="dropdown-divider"></div>
+    <div class="text-center py-2">
+      <a href="#" (click)="toggleShowAll($event)" class="link-primary">
+        {{ showAll ? 'View Less' : 'View All' }}
+      </a>
+    </div>
+  </div>
+</li>

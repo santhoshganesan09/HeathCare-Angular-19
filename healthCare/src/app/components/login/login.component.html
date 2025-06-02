@@ -1,0 +1,130 @@
+<!--<div class="login-container">
+  <h2>Login</h2>
+  <form (ngSubmit)="login()">
+    <div>
+      <label>Username</label>
+      <input type="text" [(ngModel)]="username" name="username" required />
+    </div>
+    <div>
+      <label>Password</label>
+      <input type="password" [(ngModel)]="password" name="password" required />
+    </div>
+    <button type="submit">Login</button>
+    <p class="error" *ngIf="errorMessage">{{ errorMessage }}</p>
+  </form>
+</div>-->
+
+<!--<div class="login-container">
+  <h2>Sign in to Your Account</h2>
+  <form (ngSubmit)="login()">
+    <div class="form-group">
+      <label for="username">Username</label>
+      <input id="username" type="text" [(ngModel)]="username" name="username" required />
+    </div>
+
+    <div class="form-group">
+      <label for="password">Password</label>
+      <input id="password" type="password" [(ngModel)]="password" name="password" required />
+    </div>
+
+    <div class="actions">
+      <a href="" class="forgot-link">Forgot password?</a>
+    </div>
+
+    <button type="submit">Login</button>
+
+    <p class="error" *ngIf="errorMessage">{{ errorMessage }}</p>
+  </form>
+</div>-->
+
+<div class="auth-main">
+  <div class="auth-wrapper v3">
+    <div class="auth-form">
+      <div class="auth-header">
+        <a href="javascript:"><img  src="assets/templates/images/oxygen-tank-16780126-unscreen.gif" width="75px" height="75px"alt="logo" /><strong style="font-family: monospace; font-size: 25px; color: black;">HealthCare</strong></a>
+      </div>
+      <div class="card my-5">
+        <div class="card-body">
+
+          
+          <div class="d-flex justify-content-between align-items-end mb-4">
+            <h3 class="mb-0"><b>Login</b></h3>
+            <a routerLink="/register-page"  class="link-primary">Don't have an account?</a>
+          </div>
+          <form (ngSubmit)="login()">
+         <div class="form-group">
+      <label for="username">Username</label>
+      <input id="username" type="text" [(ngModel)]="username" name="username" placeholder="User Name" required />
+    </div>
+
+         <div class="form-group">
+      <label for="password">Password</label>
+      <input id="password" type="password" [(ngModel)]="password" name="password" placeholder="Password" required />
+    </div>
+
+          <div class="d-flex mt-1 justify-content-between">
+            <div class="form-check">
+              <input class="form-check-input input-primary" type="checkbox" id="customCheckc1" checked="" />
+              <label class="form-check-label text-muted" for="customCheckc1">Keep me sign in</label>
+            </div>
+            <h5 class="text-secondary f-w-400"><a href="javascript:">Forgot Password?</a></h5>
+          </div>
+          <div class="d-grid mt-4">
+            <button type="submit" class="btn btn-primary">Login</button>
+          </div>
+          </form>
+          <div class="saprator mt-3">
+            <span>Login with</span>
+          </div>
+          <div class="row">
+            @for (item of SignInOptions; track item) {
+              <div class="col-4">
+                <div class="d-grid">
+                  <button type="button" class="btn mt-2 btn-light-primary bg-light text-muted">
+                    <img src="{{ item.image }}" alt="google img" />
+                    <span  class="d-none d-sm-inline-block">{{ item.name }}</span>
+                  </button>
+                </div>
+              </div>
+            }
+          </div>
+
+              <p class="error" *ngIf="errorMessage">{{ errorMessage }}</p>
+
+          
+
+
+
+        </div>
+      </div>
+      <div class="auth-footer row">
+        <div class="col my-1">
+          <p class="m-0">
+            Copyright ©
+            <a href="https://codedthemes.com/" target="_blank">HealthCare</a>
+          </p>
+        </div>
+        <div class="col-auto my-1">
+          <ul class="list-inline footer-link mb-0">
+            <li  class="list-inline-item"><a style="color: black;" href="javascript:0">Home</a></li>
+            <li  class="list-inline-item"><a style="color: black;" href="0" target="_blank">Privacy Policy</a></li>
+            <li  class="list-inline-item"><a  style="color: rgb(0, 0, 0);" href="0" target="_blank">Contact us</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+
+<!--Login Page
+<app-login-page></app-login-page>-->
+
+<!--Register Page
+<app-register-page></app-register-page>-->

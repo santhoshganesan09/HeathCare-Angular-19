@@ -1,0 +1,167 @@
+
+<div class="row">
+  
+  <div class="col-md-12 col-xl-8">
+    <h5>Defect Report</h5>
+    <div class="table-responsive">
+    <div class="card">
+      <div class="card-body">
+
+        <table class="table table-bordered table-striped table-hover">
+          <thead class="table-dark">
+            <tr>
+              <th>Report ID</th>
+              <th>Cylinder ID</th>
+              <th>Defect Type</th>
+              <th>Description</th>
+              <th>Date</th>
+              <th *ngIf="userRole === 'ADMIN'" >Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let defect of defects">
+              <td>{{ defect.id }}</td>
+              <td>{{ defect.cylinder?.cylinderId }}</td>
+              <td>{{ defect.defectType }}</td>
+              <td>{{ defect.description }}</td>
+              <td>{{ defect.createdAt | date:'medium' }}</td>
+              <td *ngIf="userRole === 'ADMIN'">
+
+                <div class="d-grid gap-2 d-md-flex justify-content-md-center">
+                  <button (click)="deleteDefect(defect.id!)" class="btn btn-danger btn-sm">Delete</button>
+                  <button type="button" class="btn btn-warning" (click)="editDefect(defect)" data-bs-toggle="modal" data-bs-target="#exampleModal1">
+                    Edit
+                    </button>
+                </div>
+    
+        </td>
+    
+                 
+                
+    
+    
+          
+            </tr>
+          </tbody>
+        </table>
+
+      </div>
+    </div>
+  </div>
+
+
+  </div>
+
+
+    <!-- Modal -->
+                     <div class="modal fade" id="exampleModal1" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                      <div class="modal-dialog">
+                        <div class="modal-content">
+                          <div class="modal-header">
+                            <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                          </div>
+                          <div class="modal-body">
+                            <form *ngIf="selectedDefect">
+                              <div class="mb-3">
+                                <label for="defectType" class="form-label">Defect Type</label>
+                                <input type="text" class="form-control" id="defectType" [(ngModel)]="selectedDefect.defectType" name="defectType">
+                              </div>
+                              <div class="mb-3">
+                                <label for="description" class="form-label">Description</label>
+                                <textarea class="form-control" id="description" [(ngModel)]="selectedDefect.description" name="description"></textarea>
+                              </div>
+                              <div class="mb-3">
+                                <label for="createdAt" class="form-label">Date</label>
+                                <input type="date" class="form-control" id="createdAt" [(ngModel)]="selectedDefect.createdAt" name="createdAt">
+                              </div>
+                              <div class="mb-3">
+                                <label for="cylinderId" class="form-label">Cylinder ID</label>
+                                <input type="number" class="form-control" id="cylinderId" [(ngModel)]="selectedDefect.cylinder.cylinderId" name="cylinderId">
+                              </div>
+                            </form>
+                          
+                          </div>
+                          <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-primary" (click)="saveChanges()" >Save changes</button>
+                          
+    
+                            
+    
+    
+    
+    
+                          </div>
+                        </div>
+                      </div>
+                      </div>
+
+
+
+  <div class="col-md-12 col-xl-4">
+    <h5>Add Defect-Cylinder</h5>
+    <div class="card">
+      <div class="card-body">
+        
+        <form (ngSubmit)="addDefect()" class="mb-4">
+          <div class="form-group">
+            <label for="cylinderId">Cylinder ID</label>
+            <input
+              type="number"
+              class="form-control"
+              [(ngModel)]="newDefect.cylinder.cylinderId"
+              name="cylinderId"
+              required
+            />
+          </div>
+        
+          <div class="form-group">
+            <label for="defectType">Defect Type</label>
+            <input
+              type="text"
+              class="form-control"
+              [(ngModel)]="newDefect.defectType"
+              name="defectType"
+              required
+            />
+          </div>
+        
+          <div class="form-group">
+            <label for="description">Description</label>
+            <input
+              type="text"
+              class="form-control"
+              [(ngModel)]="newDefect.description"
+              name="description"
+              required
+            />
+          </div>
+        
+          <div class="form-group">
+            <label for="createdAt">Date</label>
+            <input
+              type="datetime-local"
+              class="form-control"
+              [(ngModel)]="newDefect.createdAt"
+              name="createdAt"
+              required
+            />
+          </div><br />
+        
+          <button type="submit" class="btn btn-warning">Report Defect</button>
+        </form>
+      
+      </div>
+    </div>
+
+  </div>
+
+
+</div>
+
+
+<!-- Toast Container (Outside of Modal) -->
+<div class="toast-container position-fixed bottom-0 end-0 p-3">
+  <!-- Toast message will be dynamically added here -->
+</div>

@@ -1,0 +1,236 @@
+<br>
+
+
+<!-- Add Cylinder Form -->
+<div class="col-md-12">
+  <h5>Add Cylinder</h5>
+  <div class="card">
+    <div class="card-body">
+      <form (ngSubmit)="addCylinder()" class="row g-3">
+        
+        <div class="col-md-6">
+          <label for="serialNumber" class="form-label">Serial Number</label>
+          <input type="text" id="serialNumber" class="form-control" [(ngModel)]="newCylinder.serialNumber" name="serialNumber" required>
+        </div>
+
+        <!-- Cylinder Type Dropdown -->
+        <div class="col-md-6">
+          <label for="cylinderType" class="form-label">Cylinder Type</label>
+          <select id="cylinderType" class="form-select" [(ngModel)]="newCylinder.cylinderType" name="cylinderType" (change)="onCylinderTypeChange()" required>
+            <option *ngFor="let type of cylinderTypes" [ngValue]="type">{{type.name}}</option>
+          </select>
+        </div>
+
+        <div class="col-md-3">
+          <label for="pressure" class="form-label">Pressure</label>
+          <input type="number" id="pressure" class="form-control" [(ngModel)]="newCylinder.pressure" name="pressure" required>
+        </div>
+
+        <div class="col-md-3">
+          <label for="temperature" class="form-label">Temperature</label>
+          <input type="number" id="temperature" class="form-control" [(ngModel)]="newCylinder.temperature" name="temperature" required>
+        </div>
+
+        <div class="col-md-4">
+          <label for="status" class="form-label">Status</label>
+          <select id="status" class="form-select" [(ngModel)]="newCylinder.status" name="status" required>
+            <option class="text-success" value="Active">Active</option>
+            <option class="text-warning" value="Warning">Warning</option>
+            <option class="text-danger" value="Critical">Critical</option>
+          </select>
+        </div>
+
+        <div class="col-md-8">
+          <label for="location" class="form-label">Location</label>
+          <input type="text" id="location" class="form-control" [(ngModel)]="newCylinder.location" name="location" required>
+        </div>
+
+        <div class="col-md-6">
+          <label for="capacity" class="form-label">Capacity</label>
+          <input type="text" id="capacity" class="form-control" [(ngModel)]="newCylinder.capacity" name="capacity" required>
+        </div>
+
+        <div class="col-md-6">
+          <label for="manufacturer" class="form-label">Manufacturer</label>
+          <input type="text" id="manufacturer" class="form-control" [(ngModel)]="newCylinder.manufacturer" name="manufacturer" required>
+        </div>
+
+        <div class="col-md-4">
+          <label for="maintenanceDue" class="form-label">Maintenance Due</label>
+          <select id="maintenanceDue" class="form-select" [(ngModel)]="newCylinder.maintenanceDue" name="maintenanceDue">
+            <option [ngValue]="true">Yes</option>
+            <option [ngValue]="false">No</option>
+          </select>
+        </div>
+
+        <div class="col-md-8">
+          <label for="lastInspectedAt" class="form-label">Last Inspected At</label>
+          <input type="datetime-local" id="lastInspectedAt" class="form-control" [(ngModel)]="newCylinder.lastInspectedAt" name="lastInspectedAt">
+        </div>
+
+        <div class="col-md-6">
+          <label for="lastMaintenanceDate" class="form-label">Last Maintenance Date</label>
+          <input type="date" id="lastMaintenanceDate" class="form-control" [(ngModel)]="newCylinder.lastMaintenanceDate" name="lastMaintenanceDate">
+        </div>
+
+        <div class="col-md-6">
+          <label for="nextInspectionDate" class="form-label">Next Inspection Date</label>
+          <input type="date" id="nextInspectionDate" class="form-control" [(ngModel)]="newCylinder.nextInspectionDate" name="nextInspectionDate">
+        </div>
+
+        <div class="col-12">
+          <button type="submit" class="btn btn-warning">Add Cylinder</button>
+        </div>
+        
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- Cylinder List Section -->
+<div class="col-md-12">
+  <h5>Cylinder List</h5>
+  <div class="table-responsive scrollable-table">
+    <div class="card">
+      <div class="card-body">
+        <table class="table table-bordered table-striped table-hover">
+          <thead class="table-dark">
+            <tr>
+              <th>ID</th>
+              <th>Serial No.</th>
+              <th>Cylinder Type</th>
+              <th>Pressure</th>
+              <th>Temp</th>
+              <th>Status</th>
+              <th>Location</th>
+              <th>Capacity</th>
+              <th>Manufacturer</th>
+              <th>Maint. Due</th>
+              <th>Last Inspected</th>
+              <th>Last Maint.</th>
+              <th>Next Inspect</th>
+              <th *ngIf="userRole === 'ADMIN'">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let cylinder of cylinders">
+              <td>{{ cylinder.cylinderId }}</td>
+              <td>{{ cylinder.serialNumber }}</td>
+              <td>{{ cylinder.cylinderType?.name }}</td>
+              <td>{{ cylinder.pressure }}</td>
+              <td>{{ cylinder.temperature }}</td>
+              <td [ngClass]="{
+      'text-success': cylinder.status === 'Active', 
+      'text-warning': cylinder.status === 'Warning', 
+      'text-danger': cylinder.status === 'Critical'
+    }">
+                {{ cylinder.status }}
+              </td>
+              <td>{{ cylinder.location }}</td>
+              <td>{{ cylinder.capacity }}</td>
+              <td>{{ cylinder.manufacturer }}</td>
+              <td>{{ cylinder.maintenanceDue ? 'Yes' : 'No' }}</td>
+              <td>{{ cylinder.lastInspectedAt | date:'short' }}</td>
+              <td>{{ cylinder.lastMaintenanceDate | date:'short' }}</td>
+              <td>{{ cylinder.nextInspectionDate | date:'short' }}</td>
+              <td *ngIf="userRole === 'ADMIN'">
+                <div class="d-grid gap-2 d-md-flex justify-content-md-center">
+                  <button class="btn btn-sm btn-danger" (click)="deleteCylinder(cylinder.cylinderId!)">Delete</button>
+                  <button class="btn btn-sm btn-warning" (click)="editCylinder(cylinder)" data-bs-toggle="modal" data-bs-target="#exampleModal">Edit</button>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Edit Cylinder Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Edit Cylinder</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body" *ngIf="selectedCylinder">
+        <form>
+          <div class="row">
+            <div class="col-md-6 mb-2">
+              <label>Cylinder ID</label>
+              <input type="text" class="form-control" [(ngModel)]="selectedCylinder.cylinderId" name="editCylinderId" readonly>
+            </div>
+            <div class="col-md-6 mb-2">
+              <label>Serial Number</label>
+              <input type="text" class="form-control" [(ngModel)]="selectedCylinder.serialNumber" name="editSerialNumber">
+            </div>
+
+            <div class="col-md-6 mb-2">
+              <label>Pressure</label>
+              <input type="number" class="form-control" [(ngModel)]="selectedCylinder.pressure" name="editPressure">
+            </div>
+            <div class="col-md-6 mb-2">
+              <label>Temperature</label>
+              <input type="number" class="form-control" [(ngModel)]="selectedCylinder.temperature" name="editTemperature">
+            </div>
+
+            <div class="col-md-6 mb-2">
+              <label>Status</label>
+              <select class="form-control" [(ngModel)]="selectedCylinder.status" name="editStatus">
+                <option value="Active">Active</option>
+                <option value="Warning">Warning</option>
+                <option value="Critical">Critical</option>
+              </select>
+            </div>
+
+            <div class="col-md-6 mb-2">
+              <label>Location</label>
+              <input type="text" class="form-control" [(ngModel)]="selectedCylinder.location" name="editLocation">
+            </div>
+
+            <div class="col-md-6 mb-2">
+              <label>Capacity</label>
+              <input type="number" class="form-control" [(ngModel)]="selectedCylinder.capacity" name="editCapacity">
+            </div>
+
+            <div class="col-md-6 mb-2">
+              <label>Manufacturer</label>
+              <input type="text" class="form-control" [(ngModel)]="selectedCylinder.manufacturer" name="editManufacturer">
+            </div>
+
+            <div class="col-md-6 mb-2">
+              <label>Maintenance Due</label>
+              <select class="form-control" [(ngModel)]="selectedCylinder.maintenanceDue" name="editMaintenanceDue">
+                <option [ngValue]="true">Yes</option>
+                <option [ngValue]="false">No</option>
+              </select>
+            </div>
+
+            <div class="col-md-6 mb-2">
+              <label>Last Inspected At</label>
+              <input type="datetime-local" class="form-control" [(ngModel)]="selectedCylinder.lastInspectedAt" name="editLastInspectedAt">
+            </div>
+
+            <div class="col-md-6 mb-2">
+              <label>Last Maintenance Date</label>
+              <input type="date" class="form-control" [(ngModel)]="selectedCylinder.lastMaintenanceDate" name="editLastMaintenanceDate">
+            </div>
+
+            <div class="col-md-6 mb-2">
+              <label>Next Inspection Date</label>
+              <input type="date" class="form-control" [(ngModel)]="selectedCylinder.nextInspectionDate" name="editNextInspectionDate">
+            </div>
+          </div>
+        </form>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" (click)="saveChanges()">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>
+

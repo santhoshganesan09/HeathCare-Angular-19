@@ -1,0 +1,56 @@
+<div class="container mt-4">
+
+      <!-- [ breadcrumb ] start -->
+       <div class="page-header">
+        <div class="page-block">
+          <div class="row align-items-center">
+            <div class="col-md-12">
+              <div class="page-header-title">
+                <h5 style="cursor: pointer;" routerLink="/admin-dashboard" class="m-b-10">Admin Dashbord</h5>
+              </div>
+              <ul class="breadcrumb">
+                <li class="breadcrumb-item"><a routerLink="/admin-dashboard">Admin</a></li>
+                <li class="breadcrumb-item"><a routerLink="/admin-dashboard">Dashboard</a></li>
+                <li class="breadcrumb-item" aria-current="page">Staff Management</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- [ breadcrumb ] end -->
+
+
+
+
+
+
+
+  <h3>Staff Management</h3>
+
+  <div *ngIf="errorMessage" class="alert alert-danger">{{ errorMessage }}</div>
+
+  <table class="table table-bordered table-striped mt-3" *ngIf="staffList.length > 0; else noStaff">
+    <thead class="table-dark">
+      <tr>
+        <th>ID</th>
+        <th>Username</th>
+        <th>Role</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let staff of staffList; let i = index">
+        <td>{{ staff.id }}</td>
+        <td>{{ staff.username }}</td>
+        <td>{{ staff.role }}</td>
+        <td>
+          <button class="btn btn-danger btn-sm justify-content-center" (click)="deleteStaff(staff.id)">Delete</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <ng-template #noStaff>
+    <div class="alert alert-info">No staff users found.</div>
+  </ng-template>
+</div>

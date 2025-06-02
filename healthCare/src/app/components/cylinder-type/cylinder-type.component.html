@@ -1,0 +1,173 @@
+<div class="mt-4 p-40">
+
+   <!-- [ breadcrumb ] start -->
+       <div class="page-header">
+        <div class="page-block">
+          <div class="row align-items-center">
+            <div class="col-md-12">
+              <div class="page-header-title">
+                <h5 style="cursor: pointer;" routerLink="/admin-dashboard" class="m-b-10">Admin Dashbord</h5>
+              </div>
+              <ul class="breadcrumb">
+                <li class="breadcrumb-item"><a >Admin</a></li>
+                <li class="breadcrumb-item"><a  routerLink="/admin-dashboard" >Dashboard</a></li>
+                <li class="breadcrumb-item" aria-current="page">Cylinder type</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+  <br>
+  <h2 class="mb-4">Cylinder Types</h2>
+
+  <!-- Add Cylinder Type Form -->
+  <form (ngSubmit)="addCylinderType()" class="row g-3 mb-4">
+    <div class="col-md-4">
+      <input type="text" class="form-control" placeholder="Name" [(ngModel)]="newType.name" name="name" required />
+    </div>
+    <div class="col-md-4">
+      <input type="text" class="form-control" placeholder="Capacity" [(ngModel)]="newType.capacity" name="capacity" required />
+    </div>
+    <div class="col-md-4">
+      <input type="text" class="form-control" placeholder="Material of Cylinder" [(ngModel)]="newType.materialOfCylinder" name="materialOfCylinder" required />
+    </div>
+    <div class="col-md-6">
+      <input type="text" class="form-control" placeholder="Manufacturer" [(ngModel)]="newType.manufacturer" name="manufacturer" required />
+    </div>
+    <div class="col-md-6">
+      <input type="text" class="form-control" placeholder="Usage Guidelines" [(ngModel)]="newType.usageGuidelines" name="usageGuidelines" required />
+    </div>
+    <div class="col-12">
+      <button type="submit" class="btn btn-success">Add Cylinder Type</button>
+    </div>
+  </form>
+
+  <!-- Cylinder Types Table -->
+ <div class="table-responsive">
+    <div class="card">
+      <div class="card-body">
+
+          <table class="table table-bordered table-striped">
+    <thead class="table-dark">
+      <tr>
+        <th>Name</th>
+        <th>Capacity</th>
+        <th>Material</th>
+        <th>Manufacturer</th>
+        <th>Usage Guidelines</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let type of cylinderTypes">
+        <td>{{ type.name }}</td>
+        <td>{{ type.capacity }}</td>
+        <td>{{ type.materialOfCylinder }}</td>
+        <td>{{ type.manufacturer }}</td>
+        <td>{{ type.usageGuidelines }}</td>
+        <td>
+          <div class="d-grid gap-2 d-md-flex justify-content-md-center">
+          <button class="btn btn-primary btn-sm me-2" data-bs-toggle="modal" data-bs-target="#editModal3" (click)="editCylinderType(type)">Edit</button>
+          <button class="btn btn-danger btn-sm" (click)="deleteCylinderType(type.id!)">Delete</button>
+          </div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+    
+      </div>
+    </div>
+  </div>
+
+
+
+
+  <!--<table class="table table-bordered table-striped">
+    <thead class="table-dark">
+      <tr>
+        <th>Name</th>
+        <th>Capacity</th>
+        <th>Material</th>
+        <th>Manufacturer</th>
+        <th>Usage Guidelines</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let type of cylinderTypes">
+        <td>{{ type.name }}</td>
+        <td>{{ type.capacity }}</td>
+        <td>{{ type.materialOfCylinder }}</td>
+        <td>{{ type.manufacturer }}</td>
+        <td>{{ type.usageGuidelines }}</td>
+        <td>
+          <div class="d-grid gap-2 d-md-flex justify-content-md-center">
+          <button class="btn btn-primary btn-sm me-2" data-bs-toggle="modal" data-bs-target="#editModal3" (click)="editCylinderType(type)">Edit</button>
+          <button class="btn btn-danger btn-sm" (click)="deleteCylinderType(type.id!)">Delete</button>
+          </div>
+        </td>
+      </tr>
+    </tbody>
+  </table>-->
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- Edit Modal -->
+<div class="modal fade" id="editModal3" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <form (ngSubmit)="saveEditedType()">
+        <div class="modal-header">
+          <h5 class="modal-title" id="editModalLabel">Edit Cylinder Type</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" (click)="cancelEdit()"></button>
+        </div>
+        <div class="modal-body row g-3">
+          <div class="col-md-4">
+            <input type="text" class="form-control" placeholder="Name" [(ngModel)]="selectedType.name" name="editName" required />
+          </div>
+          <div class="col-md-4">
+            <input type="text" class="form-control" placeholder="Capacity" [(ngModel)]="selectedType.capacity" name="editCapacity" required />
+          </div>
+          <div class="col-md-4">
+            <input type="text" class="form-control" placeholder="Material of Cylinder" [(ngModel)]="selectedType.materialOfCylinder" name="editMaterial" required />
+          </div>
+          <div class="col-md-6">
+            <input type="text" class="form-control" placeholder="Manufacturer" [(ngModel)]="selectedType.manufacturer" name="editManufacturer" required />
+          </div>
+          <div class="col-md-6">
+            <input type="text" class="form-control" placeholder="Usage Guidelines" [(ngModel)]="selectedType.usageGuidelines" name="editUsage" required />
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" (click)="cancelEdit()">Cancel</button>
+          <button type="submit" class="btn btn-primary" data-bs-dismiss="modal">Save Changes</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+
+

@@ -1,0 +1,74 @@
+<div class="auth-main">
+  <div class="auth-wrapper v3">
+    <div class="auth-form">
+      <div class="auth-header">
+        <a href="javascript:"><img  src="assets/templates/images/oxygen-tank-16780126-unscreen.gif" width="75px" height="75px"alt="logo" /><strong style="font-family: monospace; font-size: 25px; color: black;">HealthCare</strong></a>
+      </div>
+      <div class="card my-5">
+        <div class="card-body">
+
+          <form (ngSubmit)="login()">
+          <div class="d-flex justify-content-between align-items-end mb-4">
+            <h3 class="mb-0"><b>Login</b></h3>
+            <a  class="link-primary">Don't have an account?</a>
+          </div>
+          <div class="form-group mb-3">
+            <label class="form-label" for="Username">User Name</label>
+            <input type="text" name="Username" [(ngModel)]="username"  class="form-control" id="text" placeholder="User Name" value="admin" />
+          </div>
+          <div class="form-group mb-3">
+            <label class="form-label" for="password">Password</label>
+            <input type="password" name="password" [(ngModel)]="password" class="form-control" id="password" placeholder="Password" value="admin123" />
+          </div>
+          <div class="d-flex mt-1 justify-content-between">
+            <div class="form-check">
+              <input class="form-check-input input-primary" type="checkbox" id="customCheckc1" checked="" />
+              <label class="form-check-label text-muted" for="customCheckc1">Keep me sign in</label>
+            </div>
+            <h5 class="text-secondary f-w-400"><a href="javascript:">Forgot Password?</a></h5>
+          </div>
+          <div class="d-grid mt-4">
+            <button type="button" class="btn btn-primary">Login</button>
+          </div>
+          <div class="saprator mt-3">
+            <span>Login with</span>
+          </div>
+          <div class="row">
+            @for (item of SignInOptions; track item) {
+              <div class="col-4">
+                <div class="d-grid">
+                  <button type="button" class="btn mt-2 btn-light-primary bg-light text-muted">
+                    <img src="{{ item.image }}" alt="google img" />
+                    <span  class="d-none d-sm-inline-block">{{ item.name }}</span>
+                  </button>
+                </div>
+              </div>
+            }
+          </div>
+
+              <p class="error" *ngIf="errorMessage">{{ errorMessage }}</p>
+
+          </form>
+
+
+
+        </div>
+      </div>
+      <div class="auth-footer row">
+        <div class="col my-1">
+          <p class="m-0">
+            Copyright ©
+            <a href="https://codedthemes.com/" target="_blank">HealthCare</a>
+          </p>
+        </div>
+        <div class="col-auto my-1">
+          <ul class="list-inline footer-link mb-0">
+            <li class="list-inline-item"><a href="javascript:0">Home</a></li>
+            <li class="list-inline-item"><a href="0" target="_blank">Privacy Policy</a></li>
+            <li class="list-inline-item"><a href="0" target="_blank">Contact us</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

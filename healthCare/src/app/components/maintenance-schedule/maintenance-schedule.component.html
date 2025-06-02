@@ -1,0 +1,196 @@
+<div class="mt-4 p-40 row">
+
+<!-- [ breadcrumb ] start -->
+  <div class="page-header">
+  <div class="page-block">
+    <div class="row align-items-center">
+      <div class="col-md-12">
+        <div class="page-header-title">
+          <!-- Link to the correct dashboard dynamically -->
+          <h5 style="cursor: pointer;" [routerLink]="dashboardLink" class="m-b-10">
+            {{ userRole === 'ADMIN' ? 'Admin Dashboard' : 'Staff Dashboard' }}
+          </h5>
+        </div>
+        <ul class="breadcrumb">
+          <li class="breadcrumb-item">
+            <a>{{ userRole === 'ADMIN' ? 'Admin' : 'Staff' }}</a>
+          </li>
+          <li class="breadcrumb-item">
+            <a [routerLink]="dashboardLink">{{ userRole === 'ADMIN' ? 'Dashboard' : 'Dashboard' }}</a>
+          </li>
+          <li class="breadcrumb-item" aria-current="page">
+            Maintenance & Work Order
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<h2 class="mb-4">Maintenance Schedules</h2>
+
+  <!-- Add Maintenance Schedule Table-->
+ <div class="col-md-12 col-xl-8">
+   
+    <div class="table-responsive">
+    <div class="card">
+      <div class="card-body">
+
+        <table class="table table-bordered table-hover table-responsive">
+          <thead class="table-dark">
+            <tr>
+              <th>ID</th>
+              <th>Maintenance Type</th>
+              <th>Frequency</th>
+              <th>Status</th>
+              <th>Scheduled Date</th>
+              <th>Cylinder</th>
+              <th>Technician</th>
+              <th *ngIf="userRole === 'ADMIN'" >Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let schedule of schedules">
+              <td>{{ schedule.id }}</td>
+              <td>{{ schedule.maintenanceType }}</td>
+              <td>{{ schedule.frequency }}</td>
+              <td>{{ schedule.status }}</td>
+              <td>{{ schedule.scheduledDate }}</td>
+              <td>{{ schedule.cylinder?.cylinderId }}</td>
+              <td>{{ schedule.technicianAssigned?.username }}</td>
+              <td *ngIf="userRole === 'ADMIN'">
+                <div class="d-grid gap-2 d-md-flex justify-content-md-center">
+                <button class="btn btn-sm btn-info me-2" data-bs-toggle="modal" data-bs-target="#editModal" (click)="editSchedule(schedule)">Edit</button>
+                <button class="btn btn-sm btn-danger" (click)="deleteSchedule(schedule.id!)">Delete</button>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        
+      </div>
+    </div>
+  </div>
+
+
+</div>
+
+  <!-- Add Maintenance Schedules Form -->
+   <div class="col-md-12 col-xl-4"><br>
+    <h5>Maintenanace Form</h5>
+    <div class="card">
+      <div class="card-body">
+        
+         <form (ngSubmit)="addSchedule()" class="">
+    <div class="row">
+      <div class="col-md-4 mb-3">
+        <label>Maintenance Type</label>
+        <input type="text" class="form-control" [(ngModel)]="newSchedule.maintenanceType" name="maintenanceType" required />
+      </div>
+      <div class="col-md-4 mb-3">
+        <label>Frequency</label>
+        <input type="text" class="form-control" [(ngModel)]="newSchedule.frequency" name="frequency" required />
+      </div>
+      <div class="col-md-4 mb-3">
+        <label>Status</label>
+        <select class="form-control" [(ngModel)]="newSchedule.status" name="status" required>
+          <option value="">Select Status</option>
+          <option>Pending</option>
+          <option>In Progress</option>
+          <option>Completed</option>
+        </select>
+      </div>
+    
+  </div>
+
+    <div class="row">
+      <div class="col-md-6 mb-3">
+        <label>Scheduled Date</label>
+        <input type="date" class="form-control" [(ngModel)]="newSchedule.scheduledDate" name="scheduledDate" required />
+      </div>
+      <div class="col-md-6 mb-3">
+        <label>Cylinder</label>
+        <select class="form-control" [(ngModel)]="newSchedule.cylinder.cylinderId" name="cylinder" required>
+          <option *ngFor="let c of cylinders" [value]="c.cylinderId">Cylinder {{ c.cylinderId }} - {{ c.location }}</option>
+        </select>
+      </div>
+      <div class="col-md-6 mb-3">
+        <label>Technician</label>
+        <select class="form-control" [(ngModel)]="newSchedule.technicianAssigned.id" name="technician" required>
+          <option *ngFor="let tech of technicians" [value]="tech.id">{{ tech.username }}</option>
+        </select>
+      </div>
+    </div>
+
+    <button type="submit" class="btn btn-primary mt-2">Add Schedule</button>
+        </form>
+      
+      </div>
+    </div>
+
+  </div>
+
+</div>
+
+<!-- Edit Maintenance Schedule Modal -->
+<div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <form (ngSubmit)="saveSelectedSchedule()">
+        <div class="modal-header">
+          <h5 class="modal-title" id="editModalLabel">Edit Maintenance Schedule</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+
+        <div class="modal-body" *ngIf="selectedSchedule">
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label>Maintenance Type</label>
+              <input type="text" class="form-control" [(ngModel)]="selectedSchedule.maintenanceType" name="editMaintenanceType" />
+            </div>
+            <div class="col-md-6 mb-3">
+              <label>Frequency</label>
+              <input type="text" class="form-control" [(ngModel)]="selectedSchedule.frequency" name="editFrequency" />
+            </div>
+            <div class="col-md-6 mb-3">
+              <label>Status</label>
+              <select class="form-control" [(ngModel)]="selectedSchedule.status" name="editStatus">
+                <option>Pending</option>
+                <option>In Progress</option>
+                <option>Completed</option>
+              </select>
+            </div>
+            <div class="col-md-6 mb-3">
+              <label>Scheduled Date</label>
+              <input type="date" class="form-control" [(ngModel)]="selectedSchedule.scheduledDate" name="editScheduledDate" />
+            </div>
+            <div class="col-md-6 mb-3">
+              <label>Cylinder</label>
+              <select class="form-control" [(ngModel)]="selectedSchedule.cylinder.cylinderId" name="editCylinder">
+                <option *ngFor="let c of cylinders" [value]="c.cylinderId">Cylinder {{ c.cylinderId }} - {{ c.location }}</option>
+              </select>
+            </div>
+            <div class="col-md-6 mb-3">
+              <label>Technician</label>
+              <select class="form-control" [(ngModel)]="selectedSchedule.technicianAssigned.id" name="editTechnician">
+                <option *ngFor="let tech of technicians" [value]="tech.id">{{ tech.username }}</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-primary">Save Changes</button>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+
+
+
+<app-work-order></app-work-order>
+
+

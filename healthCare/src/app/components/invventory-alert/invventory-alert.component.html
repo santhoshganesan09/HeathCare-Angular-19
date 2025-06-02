@@ -1,0 +1,128 @@
+<div class="container mt-4">
+
+<!-- [ breadcrumb ] start -->
+      <div class="page-header">
+  <div class="page-block">
+    <div class="row align-items-center">
+      <div class="col-md-12">
+        <div class="page-header-title">
+          <!-- Link to the correct dashboard dynamically -->
+          <h5 style="cursor: pointer;" [routerLink]="dashboardLink" class="m-b-10">
+            {{ userRole === 'ADMIN' ? 'Admin Dashboard' : 'Staff Dashboard' }}
+          </h5>
+        </div>
+        <ul class="breadcrumb">
+          <li class="breadcrumb-item">
+            <a>{{ userRole === 'ADMIN' ? 'Admin' : 'Staff' }}</a>
+          </li>
+          <li class="breadcrumb-item">
+            <a [routerLink]="dashboardLink">{{ userRole === 'ADMIN' ? 'Dashboard' : 'Dashboard' }}</a>
+          </li>
+          <li class="breadcrumb-item" aria-current="page">
+            Inventory Alerts
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+  <h2 class="mb-4">Inventory Alerts</h2>
+
+  <!-- Add Inventory Alert Form -->
+  <form *ngIf="userRole==='ADMIN'" (ngSubmit)="addAlert()" class="border p-4 rounded shadow-sm bg-light mb-4">
+    <div class="row">
+      <div class="col-md-4 mb-3">
+        <label>Alert Type</label>
+        <input type="text" class="form-control" [(ngModel)]="newAlert.alertType" name="alertType" required />
+      </div>
+      <div class="col-md-4 mb-3">
+        <label>Message</label>
+        <input type="text" class="form-control" [(ngModel)]="newAlert.message" name="message" required />
+      </div>
+      <div class="col-md-4 mb-3">
+        <label>Inventory</label>
+        <select class="form-control" [(ngModel)]="newAlert.inventory!.id" name="inventory" required>
+          <option *ngFor="let inv of inventories" [value]="inv.id">
+            Inventory {{ inv.id }} - {{ inv.location }}
+          </option>
+        </select>
+      </div>
+    </div>
+    <button type="submit" class="btn btn-primary mt-2">Add Alert</button>
+  </form>
+
+  <!-- Inventory Alert Table -->
+  <table class="table table-bordered table-hover">
+    <thead class="table-dark">
+      <tr>
+        <th>ID</th>
+        <th>AlertType</th>
+        <th>Message</th>
+        <th>Resolved</th>
+        <th>Created At</th>
+        <th>Inventory ID</th>
+        <th *ngIf="userRole === 'ADMIN'" >Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let a of alerts">
+        <td>{{ a.id }}</td>
+        <td>{{ a.alertType }}</td>
+        <td>{{ a.message }}</td>
+        <td>
+          <span [class.text-success]="a.resolved" [class.text-danger]="!a.resolved">
+            {{ a.resolved ? 'Yes' : 'No' }}
+          </span>
+        </td>
+        <td>{{ a.createdAt | date: 'yyyy-MM-dd' }}</td>
+        <td>{{ a.inventory?.id }}</td>
+        <td *ngIf="userRole === 'ADMIN'">
+          <div class="d-grid gap-2 d-md-flex justify-content-md-center">
+          <button
+
+            class="btn btn-sm btn-warning me-2"
+            data-bs-toggle="modal"
+            data-bs-target="#editModal5"
+            (click)="editAlert(a)"
+            [disabled]="a.resolved"
+          >
+            Mark as Resolved
+          </button>
+          <button class="btn btn-danger btn-sm" (click)=" a.id? deleteAlert(a.id):null">Delete</button>
+
+          </div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- Resolve Alert Modal -->
+<div class="modal fade" id="editModal5" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <form (ngSubmit)="resolveAlert()">
+        <div class="modal-header">
+          <h5 class="modal-title" id="editModalLabel">Resolve Inventory Alert</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+
+        <div class="modal-body">
+          <p><strong>Alert Type:</strong> {{ editAlertData.alertType }}</p>
+          <p><strong>Message:</strong> {{ editAlertData.message }}</p>
+          <p>Are you sure you want to mark this alert as <strong>resolved</strong>?</p>
+        </div>
+
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-success">Yes, Mark as Resolved</button>
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

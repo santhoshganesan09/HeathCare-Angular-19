@@ -1,0 +1,95 @@
+
+        <!--Cylinder List For Staff-->
+<div class="row">   
+        <div class="col-md-12 col-xl-8">
+            <h5>Cylinder List</h5>
+            <div class="table-responsive">
+            <div class="card">
+                <div class="card-body">
+
+                <!--cylinder-Table-->
+            <table class="table table-bordered table-striped table-hover">
+                <thead class="table-dark">
+                <tr>
+                    <th scope="col">Cylinder ID</th>
+                    <th scope="col">Pressure</th>
+                    <th scope="col">Temperature</th>
+                    <th scope="col">Status</th>
+                    <th scope="col">Location</th>
+                    <th scope="col">Last Inspected At</th>
+                    
+                </tr>
+                </thead>
+                <tbody>
+                <tr *ngFor="let cylinder of cylinders">
+                    <td>{{ cylinder.cylinderId }}</td>
+                    <td>{{ cylinder.pressure }}</td>
+                    <td>{{ cylinder.temperature }}</td>
+                    <!--<td>{{ cylinder.status }}</td>-->
+                    <td style="font-weight: bold;"  [ngClass]="{
+                    'text-success': cylinder.status === 'Active',
+                    'text-warning': cylinder.status === 'Warning',
+                    'text-danger': cylinder.status === 'Critical'
+                    }">
+                {{ cylinder.status }}
+                </td>
+                    <td>{{ cylinder.location }}</td>
+                    <td>{{ cylinder.lastInspectedAt | date:'short' }}</td>
+                    
+                </tr>
+                </tbody>
+            </table>
+                </div>
+            </div>
+            
+            </div>
+        </div>
+
+        
+        <div class="col-md-12 col-xl-4">
+        <h5>Add Cylinder</h5>
+        <div class="card">
+            <div class="card-body">
+
+        <!-- Form to add a new cylinder -->
+        <form (ngSubmit)="addCylinder()">
+        <div class="form-group">
+            <label for="pressure">Pressure</label>
+            <label for="">Pressure</label>
+            <input  type="number" class="form-control" id="pressure" [(ngModel)]="newCylinder.pressure" name="pressure" required>
+        </div>
+        <div class="form-group">
+            <label for="temperature">Temperature</label>
+            <input  type="number" class="form-control" id="temperature" [(ngModel)]="newCylinder.temperature" name="temperature" required>
+        </div>
+        <!--<div class="form-group">
+            <label for="status">Status</label>
+            <input  type="text" class="form-control" id="status" [(ngModel)]="newCylinder.status" name="status" required>
+        </div>-->
+
+        <div class="form-group">
+            <label for="status">Status</label>
+            <select class="form-control" id="status" [(ngModel)]="newCylinder.status" name="status" required>
+            <option value="Active">Active</option>
+            <option value="Warning">Warning</option>
+            <option value="Critical">Critical</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="location">Location</label>
+            <input  type="text" class="form-control" id="location" [(ngModel)]="newCylinder.location" name="location" required>
+        </div><br>
+
+        <button type="submit" class="btn btn-warning">Add Cylinder</button>
+
+        
+        
+
+
+        </form><br>
+            </div>
+        </div>
+
+        </div>
+</div> 
